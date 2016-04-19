@@ -5,3 +5,17 @@
 When a C program is compiled, it goes through a number of stages to get from your plain unobfuscated code (.c file) to a working distributable binary.
 
 ![diagram](https://upload.wikimedia.org/wikipedia/commons/0/0f/Avr-gcc.png)
+
+1. The compiler combines each .c file with its corresponding header (.h file) and 'converts' it in to assembly, a set of instructions to present to the CPU (.s files).
+2. The assembler assembles each .s file into its 'object code', essentially converting each piece of human readable assembly into alpha-numeric machine code, represented in hex.
+3. The linker combines the objects with additional boilerplate code and any required libraries into the file ELF binary.
+
+The object (or 'machine') code is basically a one to one convertion from each instruction i nthe assembly into a hex representation.
+
+When we reverse engineer a binary such as this, we are trying to work out the inner workings, or get as close to the original source as possible... Since the binary file is essentially all of the machine code clumped together, we can use a dissassembler to fairly easily convert it back into a human readable assembly (although sometimes the disassembler may be confused as to which numbers represent code, which represent data etc.).
+
+Although tools do exist, it is pretty difficult to take it any further than this. Different compilers on different operating systems (or different versions of the same operating system) on machines using different architectures are all likely to produce wildly different assembly to get the job done. This makes it extremely difficult to then easily convert the assembly back to an accurate representation of the original code in C. One notable tool is IDA Pro with its decompiler plugin. It definitely helps with the reverse engineering process but a) It is extremely expensive and b) it is still not a perfect decompilation. The output is definitely more readable than common assembly but it is still unlikely to compile and should instead be labeled closer to pseudocode than pure C.
+
+For the reasons stated above, during the reverse engineering process you usually only take it as far as dissasembly... from there it is up to you to work the rest out. You should therefore get to learning assembly!
+
+
