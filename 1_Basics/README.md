@@ -108,4 +108,18 @@ If the value of eax is less than ebx, jump to the provided memory address.
 #### Other Instructions
 These are just the tip of the iceberg, and there are many more instructions available, such as xor, and, imul (integer multiplication) etc. See [Guide to x86 assembly](http://www.cs.virginia.edu/~evans/cs216/guides/x86.html) for a great short guide or [x86 Assembly Langyage reference (PDF)](https://docs.oracle.com/cd/E19641-01/802-1948/802-1948.pdf) for a complete reference.
 
+### Calling functions / finding arguments
 
+This won't go too deep into the official C language calling conventions. You can and should find them in the Guide to x86 assembly linked above.
+
+The basics you need to know for the intro to RE is how arguments are passed to a function.
+
+Arguments are passed by placing on them stack before calling the function using the `call` instruction. The function will then pop them off the stack to use. So that the fucntion pops them off in the correct order, you should remember that all arguments are actually put onto the stack in reverse order! For example:
+
+```assembly
+push eax
+push ebx
+push ecx
+call _main
+```
+Where eax, ebx and ecx are the 3rd, 2nd and 1st arguments respectively.
