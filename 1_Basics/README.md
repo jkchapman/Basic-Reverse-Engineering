@@ -18,4 +18,11 @@ Although tools do exist, it is pretty difficult to take it any further than this
 
 For the reasons stated above, during the reverse engineering process you usually only take it as far as dissasembly... from there it is up to you to work the rest out. You should therefore get to learning assembly!
 
+##Intel x86 
 
+Assembly comes in many shapes and sizes for different CPU architectures. In this guide we'll be looking at Intels assembly, predominantly the x86 (32bit) instruction set. You are most likely (at least in earlier levels) to encounter this in CTF challenges. However saying that, x64 is increasingly being used in such challenges. I'll do a seperate writeup on that sometime later.
+
+### Registers
+Registers are small 'places' within a CPU that hold data. They are used to speedily pass data to be used by the CPU. There are 8 general purpose registers in x86 assembly: EAX, EBX, ECX, EDX, ESI, EDI, ESP and EBP. The first 6 are used for general storing / passing of data (CPU instructions, memory addresses, individual characters etc.). The last 2 are reserved for special purposes. The stack pointer (ESP) points to the top of the stack. The base pointer (EBP) points to the top of the current frame, or, generally holds the return address.
+
+### Instructions
