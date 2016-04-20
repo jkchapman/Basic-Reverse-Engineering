@@ -23,6 +23,89 @@ For the reasons stated above, during the reverse engineering process you usually
 Assembly comes in many shapes and sizes for different CPU architectures. In this guide we'll be looking at Intels assembly, predominantly the x86 (32bit) instruction set. You are most likely (at least in earlier levels) to encounter this in CTF challenges. However saying that, x64 is increasingly being used in such challenges. I'll do a seperate writeup on that sometime later.
 
 ### Registers
-Registers are small 'places' within a CPU that hold data. They are used to speedily pass data to be used by the CPU. There are 8 general purpose registers in x86 assembly: EAX, EBX, ECX, EDX, ESI, EDI, ESP and EBP. The first 6 are used for general storing / passing of data (CPU instructions, memory addresses, individual characters etc.). The last 2 are reserved for special purposes. The stack pointer (ESP) points to the top of the stack. The base pointer (EBP) points to the top of the current frame, or, generally holds the return address.
+Registers are small 'places' within a CPU that hold data. They are used to speedily pass data to be used by the CPU. There are 8 general purpose registers in x86 assembly: EAX, EBX, ECX, EDX, ESI, EDI, ESP and EBP. The first 6 are used for general storing / passing of data (CPU instructions, memory addresses, individual characters etc.). The last 2 are reserved for special purposes. The stack pointer (ESP) points to the top of the stack. The base pointer (EBP) points to the top of the current frame, or, generally holds the return address. 
+
+EIP also exists: The instruction pointer. This will lways hold the next instruction to be executed by the CPU (useful for exploitation purposes!).
+
+Not: NOT case sensitive. EAX and eax are the same.
 
 ### Instructions
+Assembly instructions usually consist of a short code / keyword to represent the instruction followed by 0 to many operands or arguments.
+
+The first instruction we weill look at is the MOV instruction.
+
+#### MOV
+
+The MOV instruction simply copies the data referred to by the second operand into the location referred to by the first operand. An example would be:
+
+```assembly
+mov eax, ecx
+```
+Move the value stored in register ECX into EAX.
+
+If memory addresses are stored at a location, it is possible to reference the data stored within said memory address directly using []. For example:
+
+```assembly
+mov eax, [ebx]
+```
+Move the value stored in memory at the address contained in EBX into EAX.
+
+Simple arithmetic may also be used upon operands. For example:
+
+```assembly
+mov eax, [ebx+4]
+```
+Move the value stored in memory at the address contained in (ebx + 4).
+
+####PUSH & POP
+
+Push and pop are pretty simple... They push items onto the stack, and pop items off of the stack.
+
+PUSH will take a single operand and push the value onto the stack after decrementing ESP by 4, because the stack grows DOWNWARDS to a lower address space on x86.
+
+POP will remove the value at the top of the stack and place it into the single operand provided, before incrementing ESP by 4 again to show that the stack has shrunk.
+
+```assembly
+push eax
+```
+Push eax onto the stack.
+
+```assembly
+pop [ebx]
+```
+Pop the top of the stack into memory at the location stored within ebx.
+
+#### ADD
+
+Add the two operands together and store the result in the first operand.
+
+```assembly
+add eax, 10
+```
+Add 10 to EAX and store the result in EAX (think EAX += 10)
+
+#### JMP
+
+Jump to the memory location provided. Used for changing control flow. Essentially, the new memory location provided by the operand is loaded into EIP so that it is the next instruction execruted.
+
+```assembly
+jmp 0x456789AB
+```
+Load the hardcoded address into EIP and continue.
+
+####CMP & J conditions
+
+First, CMP. CMP compares the two operands (essentially performing a SUB or subtraction) and saves the results in the mahicne status word (magic lol). Then we can use J conditions to act accordingly... This is how C if statements are handled basically.
+
+An example:
+
+```assembly
+cmp eax, ebx
+jle 0x456789AB
+```
+If the value of eax is less than ebx, jump to the provided memory address.
+
+#### Other Instructions
+These are just the tip of the iceberg, and there are many more instructions available, such as xor, and, imul (integer multiplication) etc. See [Guide to x86 assembly](http://www.cs.virginia.edu/~evans/cs216/guides/x86.html) for a great short guide or [x86 Assembly Langyage reference (PDF)](https://docs.oracle.com/cd/E19641-01/802-1948/802-1948.pdf) for a complete reference.
+
+
